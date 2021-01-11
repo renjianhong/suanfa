@@ -19,7 +19,15 @@
 
 
 package leetcode.editor.cn;
+
+import com.rjh.enerties.ListNode;
+
 //Java：删除链表的倒数第N个节点
+
+/**
+ * 一次循环删除倒数第N的节点
+ * 基本思想为定义两个节点中间相差为n,故第一个节点循环到末尾时,第二个节点即为结果
+ */
 public class P19RemoveNthNodeFromEndOfList{
     public static void main(String[] args) {
         Solution solution = new P19RemoveNthNodeFromEndOfList().new Solution();
@@ -38,9 +46,23 @@ public class P19RemoveNthNodeFromEndOfList{
  */
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        
+        ListNode pre = head;
+        ListNode font = new ListNode();
+        ListNode root = font;
+        font.next = head;
+        while (pre != null) {
+            pre = pre.next;
+            if (n-- > 0) {
+                continue;
+            }
+            font = font.next;
+        }
+        font.next = font.next.next;
+        return root.next;
     }
 }
+
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

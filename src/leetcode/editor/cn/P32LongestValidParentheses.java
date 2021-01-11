@@ -43,6 +43,10 @@
 
 package leetcode.editor.cn;
 //Java：最长有效括号
+
+/**
+ * 字符串从后向前遍历,依次维护当前下标最长有效括号的长度,则下一个位置就可以根据当前位置来进行动态规划的判断
+ */
 public class P32LongestValidParentheses{
     public static void main(String[] args) {
         Solution solution = new P32LongestValidParentheses().new Solution();
@@ -51,9 +55,31 @@ public class P32LongestValidParentheses{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int longestValidParentheses(String s) {
-
+        int len = s.length(), max = 0;
+        if (s == null || len == 0) {
+            return 0;
+        }
+        int[] dp = new int[len + 1];
+        dp[len - 1] = 0;
+        dp[len] = 0;
+        for (int i = len - 2; i >  -1; i--) {
+            if (s.charAt(i) == ')') {
+                dp[i] = 0;
+                continue;
+            }
+            if (s.charAt(i + 1) == ')') {
+                dp[i] = dp[i + 2] + 2;
+            } else {
+                int index = i + dp[i + 1] + 1;
+                dp[i] = (index == len || s.charAt(index) == '(') ? 0 : dp[i + 1] + 2 + dp[index + 1];
+            }
+            max = Math.max(max, dp[i]);
+        }
+        return max;
     }
 }
+
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

@@ -44,7 +44,17 @@
 
 
 package leetcode.editor.cn;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 //Java：组合总和
+
+/**
+ * 排序后,回溯剪枝
+ * 为了不重复,我们可以知道前面用过的,下一次不可以再次使用,和三数四叔相加思想基本一致
+ */
 public class P39CombinationSum{
     public static void main(String[] args) {
         Solution solution = new P39CombinationSum().new Solution();
@@ -52,10 +62,30 @@ public class P39CombinationSum{
     }
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    private void back(List<List<Integer>> res, List<Integer> list, int target, int start, int[] candidates) {
+        if (target == 0) {
+            res.add(new ArrayList<>(list));
+            return ;
+        }
+        for (int i = start; i < candidates.length; i++) {
+            //在这里进行判断,条件成立则后续都可以不用进行,减去了代码的冗余
+            if (target - candidates[i] < 0) {
+                break;
+            }
+            list.add(candidates[i]);
+            back(res, list, target - candidates[i], i, candidates);
+            list.remove(list.size() - 1);
+        }
+    }
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(candidates);
+        back(res, new ArrayList<>(), target, 0, candidates);
+        return res;
     }
 }
+
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

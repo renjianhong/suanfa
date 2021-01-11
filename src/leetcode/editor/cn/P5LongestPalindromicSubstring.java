@@ -45,6 +45,11 @@
 
 package leetcode.editor.cn;
 //Java：最长回文子串
+
+/**
+ * 中心扩散:将每一个字符都视为一个中心,从中心扩散查找最长
+ * Manacher:用一个数组来维护每个点最长的回文距离
+ */
 public class P5LongestPalindromicSubstring{
     public static void main(String[] args) {
         Solution solution = new P5LongestPalindromicSubstring().new Solution();
@@ -52,10 +57,52 @@ public class P5LongestPalindromicSubstring{
     }
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    private char[] manacherString(String str) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("#");
+        for (int i = 0; i < str.length(); i++) {
+            sb.append(str.charAt(i));
+            sb.append("#");
+        }
+        return sb.toString().toCharArray();
+    }
     public String longestPalindrome(String s) {
-
+        if (s == null || s.length() < 0) {
+            return null;
+        }
+        char[] charArr = manacherString(s);
+        int[] radius = new int[charArr.length];
+        int maxIndex = 0, max = Integer.MIN_VALUE;
+        int r = -1, c = -1;
+        for (int i = 0; i < radius.length; i++) {
+            radius[i] = r > i ? Math.min(radius[2 * c - i], r - i + 1) : 1;
+            while (i + radius[i] < charArr.length && i - radius[i] > -1) {
+                if (charArr[i + radius[i]] != charArr[i - radius[i]]) {
+                    break;
+                }
+                radius[i]++;
+            }
+            if (i + radius[i]  > r) {
+                c = i;
+                r = i + radius[i] - 1;
+            }
+            if (radius[i] > max) {
+                max = radius[i];
+                maxIndex = i;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = maxIndex - radius[maxIndex] + 1; i < maxIndex + radius[maxIndex]; i++) {
+            if (charArr[i] == '#') {
+                continue;
+            }
+            sb.append(charArr[i]);
+        }
+        return sb.toString();
     }
 }
+
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

@@ -42,7 +42,17 @@
 
 
 package leetcode.editor.cn;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
 //Java：有效的括号
+
+/**
+ * 简单的括号匹配,用栈的特性即可
+ * 右括号匹配失败或者最后栈不为空则代表匹配失败
+ */
 public class P20ValidParentheses{
     public static void main(String[] args) {
         Solution solution = new P20ValidParentheses().new Solution();
@@ -51,9 +61,32 @@ public class P20ValidParentheses{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean isValid(String s) {
-
+        Stack<Character> stack = new Stack<>();
+        Map<Character, Character> hashMap = new HashMap<Character, Character>() {{
+            put(')', '(');
+            put(']', '[');
+            put('}', '{');
+        }};
+        for (int i = 0; i < s.length(); i++) {
+            //练习switch的使用,这里使用if耗时会更低
+            switch (s.charAt(i)) {
+                case ')' :
+                case ']' :
+                case '}' :
+                    if (stack.empty() || hashMap.get(s.charAt(i)) != stack.pop()) {
+                        return false;
+                    }
+                    break;
+                default:
+                    stack.push(s.charAt(i));
+                    break;
+            }
+        }
+        return stack.empty();
     }
 }
+
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

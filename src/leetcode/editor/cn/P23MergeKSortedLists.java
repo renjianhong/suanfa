@@ -47,7 +47,19 @@
 
 
 package leetcode.editor.cn;
+
+import com.rjh.enerties.ListNode;
+
+import java.util.PriorityQueue;
+
 //Java：合并K个升序链表
+
+/**
+ * 对题目经行分析,输入的链表数组为升序排列且要求合并为一个,故可以想到每次都要找到一个最小的数,放入结果链表后面即可
+ * 为了找到链表数组中头结点最小的,我们可以以链表数组头结点数组为根据来一次循环找到最下的节点,进行操作,但这样就会导致时间复杂度很高,且每次都浪费
+ * 很多,因为每次找到一个后,头结点数组都是大致有序的,只存在一对结点是不符合的,故此每次只需要对一个结点维护即可,很简单就可以想到小根堆,同样可以用
+ * 优先队列来实现
+ */
 public class P23MergeKSortedLists{
     public static void main(String[] args) {
         Solution solution = new P23MergeKSortedLists().new Solution();
@@ -66,9 +78,29 @@ public class P23MergeKSortedLists{
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        
+        //用lambda表达式创建一个优先队列会更加的简洁
+        PriorityQueue<ListNode> priQueue = new PriorityQueue<>((ListNode list1, ListNode list2) -> (list1.val < list2.val ? -1 : 1));
+        for (ListNode list : lists) {
+            if (list == null) {
+                continue;
+            }
+            priQueue.add(list);
+        }
+        ListNode head = new ListNode();
+        ListNode root = head;
+        while (priQueue.size() > 0) {
+            ListNode p = priQueue.poll();
+            head.next = p;
+            head = head.next;
+            if (p.next != null) {
+                priQueue.add(p.next);
+            }
+        }
+        return root.next;
     }
 }
+
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

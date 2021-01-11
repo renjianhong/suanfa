@@ -42,6 +42,11 @@
 
 package leetcode.editor.cn;
 //Java：搜索旋转排序数组
+
+/**
+ * 二分查找
+ * 难在对边界的处理,规划好边界条件后进行判断就可以很简单的处理
+ */
 public class P33SearchInRotatedSortedArray{
     public static void main(String[] args) {
         Solution solution = new P33SearchInRotatedSortedArray().new Solution();
@@ -50,9 +55,22 @@ public class P33SearchInRotatedSortedArray{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int search(int[] nums, int target) {
-
+        int lo = 0, hi = nums.length - 1;
+        while (lo < hi) {
+            int mid = (lo + hi) / 2;
+            final boolean existed1 = (nums[0] > target) ^ (nums[0] > nums[mid]) ^ (target > nums[mid]);
+            final boolean existed2 = nums[mid] < nums[0] && (target <= nums[mid] || target >= nums[0]) || nums[mid] >=
+                    nums[0] && target >= nums[0] && target <= nums[mid];
+            if (!existed2)
+                lo = mid + 1;
+            else
+                hi = mid;
+        }
+        return lo == hi && nums[lo] == target ? lo : -1;
     }
 }
+
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

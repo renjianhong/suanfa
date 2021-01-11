@@ -50,6 +50,11 @@
 
 package leetcode.editor.cn;
 //Java：盛最多水的容器
+
+/**
+ * 思维题目,双指针
+ * 容器装水的量是和最低的柱子有关的,故每次将较小的柱子移动即可,每次比较此时容纳水的量,维护最大值
+ */
 public class P11ContainerWithMostWater{
     public static void main(String[] args) {
         Solution solution = new P11ContainerWithMostWater().new Solution();
@@ -58,9 +63,15 @@ public class P11ContainerWithMostWater{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int maxArea(int[] height) {
-
+        int i = 0, j = height.length - 1, max = Integer.MIN_VALUE, h;
+        while (i < j) {
+            h = height[i] > height[j] ? j-- : i++;
+            max = Math.max(max, height[h] * (j - i + 1));
+        }
+        return max;
     }
 }
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

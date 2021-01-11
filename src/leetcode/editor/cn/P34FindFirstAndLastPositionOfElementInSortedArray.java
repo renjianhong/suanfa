@@ -44,6 +44,10 @@
 
 package leetcode.editor.cn;
 //Java：在排序数组中查找元素的第一个和最后一个位置
+
+/**
+ * 对左右边界分别进行处理,采用二分思想
+ */
 public class P34FindFirstAndLastPositionOfElementInSortedArray{
     public static void main(String[] args) {
         Solution solution = new P34FindFirstAndLastPositionOfElementInSortedArray().new Solution();
@@ -51,10 +55,47 @@ public class P34FindFirstAndLastPositionOfElementInSortedArray{
     }
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    private void getLeft(int[] nums, int[] arr, int target, int start, int end) {
+        if (start > end) {
+            return ;
+        }
+        if (start == end) {
+            arr[0] = nums[start] == target ? start : -1;
+            return ;
+        }
+        int mid = (start + end) / 2;
+        if (target <= nums[mid]) {
+            end = mid;
+        } else {
+            start = mid + 1;
+        }
+        getLeft(nums, arr, target, start, end);
+    }
+    private void getRight(int[] nums, int[] arr, int target, int start, int end) {
+        if (start > end) {
+            return ;
+        }
+        if (start == end) {
+            arr[1] = nums[start] == target ? start : -1;
+            return ;
+        }
+        int mid = (start + end + 1) / 2;
+        if (target < nums[mid]) {
+            end = mid - 1;
+        } else {
+            start = mid;
+        }
+        getRight(nums, arr, target, start, end);
+    }
     public int[] searchRange(int[] nums, int target) {
-
+        int[] arr = {-1, -1};
+        getLeft(nums, arr, target, 0, nums.length - 1);
+        getRight(nums, arr, target, 0, nums.length - 1);
+        return arr;
     }
 }
+
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
