@@ -50,6 +50,7 @@ import java.util.HashMap;
 
 /**
  * 一次遍历,将查过的数据存起来,后面只需要一次查询就可以判断是否符合题意
+ *
  */
 public class P1TwoSum{
     public static void main(String[] args) {
